@@ -7,8 +7,8 @@ use url::Url;
 use crate::{DEFAULT_AUTHCAT_HOST, DEFAULT_DATACAT_HOST, authcat::get_access_token};
 
 #[derive(Parser, Debug)]
-#[command(about = "Create a new app.", long_about = None)]
-pub struct New {
+#[command(about = "Delete an app.", long_about = None)]
+pub struct Delete {
     #[arg(short, long)]
     datacat_host: Option<String>,
 
@@ -16,17 +16,18 @@ pub struct New {
     authcat_host: Option<String>,
 
     #[arg(short, long)]
-    name: String,
+    id: u32,
 }
 
-impl New {
-    pub fn new(self) {
+impl Delete {
+    pub fn delete(self) {
         let authcat_host = Url::parse(
             &self
                 .authcat_host
                 .unwrap_or(String::from(DEFAULT_AUTHCAT_HOST)),
         )
         .unwrap();
+
         let datacat_host = Url::parse(
             &self
                 .datacat_host
@@ -38,11 +39,10 @@ impl New {
 
         let access_token = get_access_token(&authcat_host.to_string());
 
-        let client = reqwest::blocking::Client::new();
-        let response = client
-            .put(datacat_host.clone())
+        let response = reqwest::blocking::Client::new()
+            .delete(datacat_host.clone())
             .bearer_auth(access_token)
-            .json(&json!({"name": self.name}))
+            .json(&json!({"id": &self.id}))
             .send()
             .unwrap();
 
@@ -51,7 +51,7 @@ impl New {
         } else {
             eprintln!(
                 "{} responded with {}",
-                datacat_host.to_string(),
+                datacat_host,
                 response.status().to_string()
             );
         }
