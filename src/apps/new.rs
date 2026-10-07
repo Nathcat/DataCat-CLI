@@ -1,21 +1,30 @@
 use clap::Parser;
 use json_colorizer::{FormatOptions, format_json};
+use reqwest::StatusCode;
+use serde_json::json;
 use url::Url;
 
 use crate::{DEFAULT_AUTHCAT_HOST, DEFAULT_DATACAT_HOST, authcat::get_access_token};
 
 #[derive(Parser, Debug)]
 #[command(about = "Get apps owned by the user.", long_about = None)]
-pub struct Get {
+pub struct New {
     #[arg(short, long)]
     datacat_host: Option<String>,
 
     #[arg(short, long)]
     authcat_host: Option<String>,
+
+    #[arg(short, long)]
+    name: String,
 }
 
-impl Get {
-    pub fn get(self) {
+struct Body {
+    name: String,
+}
+
+impl New {
+    pub fn new(self) {
         let authcat_host = Url::parse(
             &self
                 .authcat_host
@@ -33,21 +42,22 @@ impl Get {
 
         let access_token = get_access_token(&authcat_host.to_string());
 
-        println!(
-            "{}",
-            format_json(
-                &serde_json::from_str(
-                    &reqwest::blocking::Client::new()
-                        .get(datacat_host)
-                        .bearer_auth(access_token)
-                        .send()
-                        .unwrap()
-                        .text()
-                        .unwrap()
-                )
-                .unwrap(),
-                &FormatOptions::default()
-            )
-        );
+        let client = reqwest::blocking::Client::new();
+        let response = client
+            .put(datacat_host.clone())
+            .bearer_auth(access_token)
+            .json(&json!({"name": self.name}))
+            .send()
+            .unwrap();
+
+        if response.status() == StatusCode::OK {
+            println!("Done!");
+        } else {
+            eprintln!(
+                "{} responded with {}",
+                datacat_host.to_string(),
+                response.status().to_string()
+            );
+        }
     }
 }
