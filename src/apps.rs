@@ -1,7 +1,8 @@
 use clap::{Parser, Subcommand};
 
-use crate::apps::{list::List, new::New};
+use crate::apps::{delete::Delete, list::List, new::New};
 
+mod delete;
 mod list;
 mod new;
 
@@ -16,6 +17,7 @@ pub struct Apps {
 enum Action {
     List(List),
     New(New),
+    Delete(Delete),
 }
 
 impl Apps {
@@ -23,6 +25,7 @@ impl Apps {
         match self.action {
             Action::List(v) => v.list(),
             Action::New(v) => v.new(),
+            Action::Delete(v) => v.delete(),
         }
     }
 }
