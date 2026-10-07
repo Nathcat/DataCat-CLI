@@ -7,15 +7,14 @@ use std::{
 };
 
 use dirs::home_dir;
-use url::Url;
 
 use crate::{
     AUTH_CLIENTS_FILE, STORAGE_LOCATION, USER_AUTH_FILE, auth_client::ClientConfig,
     login::Credentials,
 };
 
-type AuthClients = HashMap<String, ClientConfig>;
-type AuthGrants = HashMap<String, Credentials>;
+pub type AuthClients = HashMap<String, ClientConfig>;
+pub type AuthGrants = HashMap<String, Credentials>;
 
 fn storage_dir() -> PathBuf {
     Path::new(&home_dir().unwrap()).join(STORAGE_LOCATION)
@@ -96,6 +95,12 @@ pub fn add_auth_grant(url: String, code: String) {
 
     let mut file = get_user_auth_file_writable();
     file.write_all(serde_json::to_string(&grants).unwrap().as_bytes())
+        .unwrap();
+}
+
+pub fn update_auth_grants(map: AuthGrants) {
+    let mut file = get_user_auth_file_writable();
+    file.write_all(serde_json::to_string(&map).unwrap().as_bytes())
         .unwrap();
 }
 

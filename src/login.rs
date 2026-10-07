@@ -19,7 +19,7 @@ pub struct Login {
     url: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Clone)]
 pub struct Credentials {
     pub grant: String,
     pub token: Option<String>,
