@@ -15,6 +15,7 @@ mod users;
 static STORAGE_LOCATION: &'static str = ".local/share/clicat";
 static AUTH_CLIENTS_FILE: &'static str = "auth_clients.json";
 static DEFAULT_AUTHCAT_HOST: &'static str = "https://auth.nathcat.net/";
+static DEFAULT_DATACAT_HOST: &'static str = "https://data.nathcat.net/";
 static USER_AUTH_FILE: &'static str = "user_auth.json";
 
 #[derive(Parser, Debug)]
@@ -40,7 +41,7 @@ fn main() {
     match cli.subcommand {
         Command::Login(v) => v.login(),
         Command::AuthClient(v) => v.handle(),
-        Command::Apps(v) => eprintln!("Not implemented!"),
+        Command::Apps(v) => v.handle(),
         Command::Users(v) => v.search(),
     }
 }

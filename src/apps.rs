@@ -1,5 +1,9 @@
 use clap::{Parser, Subcommand};
 
+use crate::apps::get::Get;
+
+mod get;
+
 #[derive(Parser, Debug)]
 #[command(about = "Manage DataCat apps.", long_about = None)]
 pub struct Apps {
@@ -7,11 +11,15 @@ pub struct Apps {
     action: Action,
 }
 
-#[derive(Parser, Debug)]
-#[command(about = "Get apps owned by the user.", long_about = None)]
-struct Get {}
-
 #[derive(Subcommand, Debug)]
 enum Action {
     Get(Get),
+}
+
+impl Apps {
+    pub fn handle(self) {
+        match self.action {
+            Action::Get(v) => v.get(),
+        }
+    }
 }
