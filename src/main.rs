@@ -1,7 +1,8 @@
 use clap::{Parser, Subcommand};
 
 use crate::{
-    apps::Apps, auth_client::AuthClient, files::init_storage_dir, login::Login, users::Users,
+    apps::Apps, auth_client::AuthClient, files::init_storage_dir, groups::Groups, login::Login,
+    users::Users,
 };
 
 mod apps;
@@ -9,6 +10,7 @@ mod auth_client;
 mod authcat;
 mod errors;
 mod files;
+mod groups;
 mod login;
 mod users;
 
@@ -31,6 +33,7 @@ enum Command {
     AuthClient(AuthClient),
     Apps(Apps),
     Users(Users),
+    Groups(Groups),
 }
 
 fn main() {
@@ -43,5 +46,6 @@ fn main() {
         Command::AuthClient(v) => v.handle(),
         Command::Apps(v) => v.handle(),
         Command::Users(v) => v.search(),
+        Command::Groups(v) => v.handle(),
     }
 }
