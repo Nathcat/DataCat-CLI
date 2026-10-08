@@ -1,8 +1,11 @@
 use clap::{Parser, Subcommand};
 
-use crate::groups::{delete::Delete, list::List, listmembers::ListMembers, new::New};
+use crate::groups::{
+    delete::Delete, invite::Invite, list::List, listmembers::ListMembers, new::New,
+};
 
 mod delete;
+mod invite;
 mod list;
 mod listmembers;
 mod new;
@@ -20,6 +23,7 @@ enum Action {
     New(New),
     List(List),
     Delete(Delete),
+    Invite(Invite),
 }
 
 impl Groups {
@@ -29,6 +33,7 @@ impl Groups {
             Action::New(v) => v.new(),
             Action::List(v) => v.list(),
             Action::Delete(v) => v.delete(),
+            Action::Invite(v) => v.invite(),
         }
     }
 }
