@@ -4,10 +4,8 @@ Command line utility for interacting with the DataCat API.
 
 ## Install
 
-Clone the repo, then:
-
 ```
-cargo install --path .
+cargo install clicat
 ```
 
 This will install the binary to `~/.cargo/bin`, so make sure to add this to your `PATH`.
