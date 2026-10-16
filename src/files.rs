@@ -9,8 +9,8 @@ use std::{
 use dirs::home_dir;
 
 use crate::{
-    AUTH_CLIENTS_FILE, STORAGE_LOCATION, USER_AUTH_FILE, auth_client::ClientConfig,
-    login::Credentials,
+    AUTH_CLIENTS_FILE, SELECTED_APP_FILE, STORAGE_LOCATION, USER_AUTH_FILE, apps::App,
+    auth_client::ClientConfig, login::Credentials,
 };
 
 pub type AuthClients = HashMap<String, ClientConfig>;
@@ -112,4 +112,28 @@ pub fn add_auth_token(url: String, token: String) {
     let mut file = get_user_auth_file_writable();
     file.write_all(serde_json::to_string(&grants).unwrap().as_bytes())
         .unwrap();
+}
+
+fn get_selected_app_file_writable() -> File {
+    return File::create(storage_dir().join(SELECTED_APP_FILE)).unwrap();
+}
+
+pub fn set_selected_app(app: &App) {
+    let mut file = get_selected_app_file_writable();
+
+    file.write_all(serde_json::to_string(app).unwrap().as_bytes())
+        .unwrap();
+}
+
+pub fn get_selected_app() -> Option<App> {
+    if !exists(storage_dir().join(SELECTED_APP_FILE)).unwrap() {
+        None
+    } else {
+        Some(
+            serde_json::from_str::<App>(
+                &read_to_string(storage_dir().join(SELECTED_APP_FILE)).unwrap(),
+            )
+            .unwrap(),
+        )
+    }
 }

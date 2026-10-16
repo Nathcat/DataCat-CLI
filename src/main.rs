@@ -11,6 +11,7 @@ mod authcat;
 mod errors;
 mod files;
 mod groups;
+mod leaderboards;
 mod login;
 mod users;
 
@@ -19,6 +20,7 @@ static AUTH_CLIENTS_FILE: &'static str = "auth_clients.json";
 static DEFAULT_AUTHCAT_HOST: &'static str = "https://auth.nathcat.net/";
 static DEFAULT_DATACAT_HOST: &'static str = "https://data.nathcat.net/";
 static USER_AUTH_FILE: &'static str = "user_auth.json";
+static SELECTED_APP_FILE: &'static str = "selected_app.json";
 
 #[derive(Parser, Debug)]
 #[command(about = "CLI tool for interacting with the DataCat API.")]
