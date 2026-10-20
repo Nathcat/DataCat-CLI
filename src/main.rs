@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
 
 use crate::{
-    apps::Apps, auth_client::AuthClient, files::init_storage_dir, groups::Groups, login::Login,
-    users::Users,
+    apps::Apps, auth_client::AuthClient, files::init_storage_dir, groups::Groups,
+    leaderboards::Leaderboards, login::Login, users::Users,
 };
 
 mod apps;
@@ -11,6 +11,7 @@ mod authcat;
 mod errors;
 mod files;
 mod groups;
+mod leaderboards;
 mod login;
 mod users;
 
@@ -19,6 +20,7 @@ static AUTH_CLIENTS_FILE: &'static str = "auth_clients.json";
 static DEFAULT_AUTHCAT_HOST: &'static str = "https://auth.nathcat.net/";
 static DEFAULT_DATACAT_HOST: &'static str = "https://data.nathcat.net/";
 static USER_AUTH_FILE: &'static str = "user_auth.json";
+static SELECTED_APP_FILE: &'static str = "selected_app.json";
 
 #[derive(Parser, Debug)]
 #[command(about = "CLI tool for interacting with the DataCat API.")]
@@ -34,6 +36,7 @@ enum Command {
     Apps(Apps),
     Users(Users),
     Groups(Groups),
+    Leaderboards(Leaderboards),
 }
 
 fn main() {
@@ -47,5 +50,6 @@ fn main() {
         Command::Apps(v) => v.handle(),
         Command::Users(v) => v.search(),
         Command::Groups(v) => v.handle(),
+        Command::Leaderboards(v) => v.handle(),
     }
 }
