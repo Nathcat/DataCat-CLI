@@ -4,13 +4,14 @@ use std::{
     io::Write,
     ops::Deref,
     path::{Path, PathBuf},
+    process::exit,
 };
 
 use dirs::home_dir;
 
 use crate::{
     AUTH_CLIENTS_FILE, SELECTED_APP_FILE, STORAGE_LOCATION, USER_AUTH_FILE, apps::App,
-    auth_client::ClientConfig, login::Credentials,
+    auth_client::ClientConfig, errors::no_app_selected, login::Credentials,
 };
 
 pub type AuthClients = HashMap<String, ClientConfig>;
@@ -125,15 +126,12 @@ pub fn set_selected_app(app: &App) {
         .unwrap();
 }
 
-pub fn get_selected_app() -> Option<App> {
+pub fn get_selected_app() -> App {
     if !exists(storage_dir().join(SELECTED_APP_FILE)).unwrap() {
-        None
+        no_app_selected();
+        exit(-1);
     } else {
-        Some(
-            serde_json::from_str::<App>(
-                &read_to_string(storage_dir().join(SELECTED_APP_FILE)).unwrap(),
-            )
-            .unwrap(),
-        )
+        serde_json::from_str::<App>(&read_to_string(storage_dir().join(SELECTED_APP_FILE)).unwrap())
+            .unwrap()
     }
 }

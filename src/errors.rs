@@ -23,3 +23,8 @@ pub fn unauthorized(host_url: String) {
     );
     exit(-1);
 }
+
+pub fn no_app_selected() {
+    eprintln!("You have not selected an app! Consider selecting one with 'clicat apps select'");
+    exit(-1);
+}

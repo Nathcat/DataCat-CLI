@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
 
 use crate::{
-    apps::Apps, auth_client::AuthClient, files::init_storage_dir, groups::Groups, login::Login,
-    users::Users,
+    apps::Apps, auth_client::AuthClient, files::init_storage_dir, groups::Groups,
+    leaderboards::Leaderboards, login::Login, users::Users,
 };
 
 mod apps;
@@ -36,6 +36,7 @@ enum Command {
     Apps(Apps),
     Users(Users),
     Groups(Groups),
+    Leaderboards(Leaderboards),
 }
 
 fn main() {
@@ -49,5 +50,6 @@ fn main() {
         Command::Apps(v) => v.handle(),
         Command::Users(v) => v.search(),
         Command::Groups(v) => v.handle(),
+        Command::Leaderboards(v) => v.handle(),
     }
 }

@@ -9,10 +9,10 @@ mod select;
 
 #[derive(serde::Deserialize, serde::Serialize)]
 pub struct App {
-    id: u32,
-    owner: u32,
-    name: String,
-    apiKey: String,
+    pub id: u32,
+    pub owner: u32,
+    pub name: String,
+    pub apiKey: String,
 }
 
 #[derive(Parser, Debug)]

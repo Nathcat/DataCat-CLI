@@ -4,7 +4,7 @@ use std::{
 };
 
 use clap::Parser;
-use url::{Url, form_urlencoded::parse};
+use url::Url;
 
 use crate::{
     DEFAULT_AUTHCAT_HOST, DEFAULT_DATACAT_HOST,
@@ -41,15 +41,6 @@ impl Select {
         .unwrap();
 
         let access_token = get_access_token(&authcat_host.to_string());
-
-        let selected_app = get_selected_app();
-
-        if let Some(app) = selected_app {
-            println!(
-                "You have already selected '{}', this operation will override this selection!",
-                app.name
-            );
-        }
 
         let apps = reqwest::blocking::Client::new()
             .get(datacat_host)
